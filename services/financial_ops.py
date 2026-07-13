@@ -94,7 +94,7 @@ def calculate_behavioral_score(user_phone):
     score = min(score, 900)
     return score, factors
 
-def perform_upi_transaction(user_phone, amount):
+def perform_upi_transaction(user_phone, amount, recip_phone=None):
     amount = float(amount)
     
     if driver:
@@ -106,9 +106,16 @@ def perform_upi_transaction(user_phone, amount):
                 WHERE a.balance >= $amount
                 SET a.balance = a.balance - $amount
                 CREATE (a)-[:HAS_TRANSACTION]->(t:Transaction {id: randomUUID(), type: 'debit', amount: $amount, desc: 'UPI Payment', timestamp: timestamp()})
+                WITH a, t
+                OPTIONAL MATCH (ru:User {phone: $recip_phone})-[:OWNS]->(ra:Account)
+                FOREACH (_ IN CASE WHEN ra IS NOT NULL THEN [1] ELSE [] END |
+                    SET ra.balance = ra.balance + $amount
+                    CREATE (ra)-[:HAS_TRANSACTION]->(:Transaction {id: randomUUID(), type: 'credit', amount: $amount, desc: 'UPI Received', timestamp: timestamp()})
+                    CREATE (a)-[:TRANSFERRED_TO {amount: $amount, timestamp: timestamp()}]->(ra)
+                )
                 RETURN a.balance AS new_balance
                 """
-                result = session.run(query, phone=user_phone, amount=amount)
+                result = session.run(query, phone=user_phone, amount=amount, recip_phone=recip_phone or "")
                 record = result.single()
                 if record:
                     return True, record["new_balance"]
@@ -138,8 +145,15 @@ def perform_upi_transaction(user_phone, amount):
             
         txns[acc_id].append({"type": "debit", "amount": amount, "desc": "UPI Payment", "timestamp": int(time.time() * 1000)})
         
+        if recip_phone and recip_phone in users:
+            recip_acc_id = users[recip_phone].get('account_id')
+            if recip_acc_id and recip_acc_id in accounts:
+                accounts[recip_acc_id]['balance'] += amount
+                if recip_acc_id not in txns:
+                    txns[recip_acc_id] = []
+                txns[recip_acc_id].append({"type": "credit", "amount": amount, "desc": "UPI Received", "timestamp": int(time.time() * 1000)})
+        
         save_json('data/accounts.json', accounts)
         save_json('data/transactions.json', txns)
         return True, accounts[acc_id]['balance']
     return False, accounts[acc_id]['balance']
-

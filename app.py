@@ -321,9 +321,10 @@ def submit_upi_success():
     state = CALL_STATE.get(call_sid, {})
     lang = state.get('lang', 'en')
     user_phone = state.get('phone', '9876543210')
+    recip = state.get('recipient')
     
-    print(f"\\n Processing transaction for user {user_phone}...")
-    success, new_balance = perform_upi_transaction(user_phone, amount)
+    print(f"\\n Processing transaction for user {user_phone} to recipient {recip}...")
+    success, new_balance = perform_upi_transaction(user_phone, amount, recip)
     
     resp = VoiceResponse()
     if success:
