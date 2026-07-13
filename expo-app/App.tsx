@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ActivityIndicator, FlatList, SafeAreaView, Platform, TouchableOpacity, Linking } from 'react-native';
 
-// Important: Ensure this matches your running ngrok URL
-const API_URL = 'https://edition-valley-engaging.ngrok-free.dev/api/dashboard/9876543210';
+const API_URL = Platform.OS === 'web' 
+  ? 'http://localhost:5000/api/dashboard/9876543210' 
+  : 'http://10.0.2.2:5000/api/dashboard/9876543210';
 
 const formatTimestamp = (ms: number) => {
   if (!ms) return 'Just now';
@@ -20,11 +21,7 @@ export default function App() {
 
   useEffect(() => {
     const fetchDashboard = () => {
-      fetch(API_URL, {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
-      })
+      fetch(API_URL)
         .then(res => res.json())
         .then(json => {
           setData(json);
