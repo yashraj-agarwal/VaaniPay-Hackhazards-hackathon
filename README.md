@@ -91,9 +91,9 @@ Select if your project participates in any track:
 
 ## 📽️ Demo & Deliverables
 
-- **Demo Video Link (Mandatory):** [Insert Link Here]  
-- **Deployment Link (Recommended):** [Insert Link Here]  
-- **Pitch Deck / PPT (Optional):** [Insert Link Here]  
+- **Demo Video Link (Mandatory):** https://youtu.be/4mincKwHNKM  
+- **Deployment Link (Recommended):** [Insert Link Here] 
+- **Pitch Deck / PPT (Optional):** https://pdflink.to/vaanipay/  
 
 ---
 
