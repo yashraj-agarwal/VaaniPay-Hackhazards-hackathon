@@ -14,7 +14,7 @@ While India's digital payment ecosystem (UPI) processes over 10 billion transact
 - [ ] Human Experience & Productivity  
 - [ ] Climate & Sustainability Systems  
 - [ ] HealthTech & Bio Platforms  
-- [ ] Learning & Knowledge Systems  
+- [x] Learning & Knowledge Systems  
 - [x] Work, Finance & Digital Economy  
 - [ ] Infrastructure, Mobility & Smart Systems  
 - [x] Trust, Identity & Security  
@@ -101,7 +101,7 @@ Select if your project participates in any track:
 
 - [x] All team members completed the mandatory social task  
 - [x] Bonus Task 1 – Badge sharing  
-- [ ] Bonus Task 2 – Blog/article  
+- [x] Bonus Task 2 – Blog/article  
 
 ---
 
