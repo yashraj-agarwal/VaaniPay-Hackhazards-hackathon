@@ -20,7 +20,11 @@ export default function App() {
 
   useEffect(() => {
     const fetchDashboard = () => {
-      fetch(API_URL)
+      fetch(API_URL, {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      })
         .then(res => res.json())
         .then(json => {
           setData(json);
